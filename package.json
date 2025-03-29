@@ -1,0 +1,19 @@
+{
+  "name": "server-ts",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon ./dist",
+    "ts": "tsc --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Igne",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "nodemon": "^3.1.9"
+  }
+}
