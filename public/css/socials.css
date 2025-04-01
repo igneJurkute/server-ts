@@ -1,0 +1,20 @@
+.socials {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    font-size: 20px;
+}
+.socials > .social-link {
+    width: 1em;
+    height: 1em;
+    font-size: inherit;
+    line-height: 1em;
+    text-align: center;
+    color: #999;
+    text-decoration: none;
+}
+.socials > .social-link:hover {
+    color: #55337a;
+    margin: -0.25em;
+    font-size: 2em;
+}

@@ -1,0 +1,21 @@
+.logo {
+    height: 30px;
+    width: 200px;
+    object-fit: contain;
+    object-position: center left;
+}
+
+.main-nav {
+    display: flex;
+    gap: 30px;
+}
+
+.link {
+    color: #000;
+    text-decoration: none;
+    font-size: 18px;
+}
+.link:hover {
+    color: #55337a;
+    text-decoration: underline;
+}
