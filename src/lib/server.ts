@@ -29,16 +29,28 @@ server.httpServer = http.createServer(async (req: IncomingMessage, res: ServerRe
     const isAPI = trimmedPath.startsWith('api/');
     const isPage = !isTextFile && !isBinaryFile && !isAPI;
 
+    // console.log(httpMethod, trimmedPath);
 
-    let responseContent = 'ERROR: neturiu tai ko tu nori...';
+
+    let responseContent: string | Buffer = 'ERROR: neturiu tai ko tu nori...';
 
 
     if (isTextFile) {
-        responseContent = 'TEKSTINIS FAILAS';
+        const [err, msg] = await file.readPublic(trimmedPath);
+         if (err) {
+             responseContent = msg;
+         } else {
+             responseContent = msg;
+         }
     }
 
     if (isBinaryFile) {
-        responseContent = 'BINARY FAILAS';
+        const [err, msg] = await file.readPublicBinary(trimmedPath);
+         if (err) {
+             responseContent = msg;
+         } else {
+             responseContent = msg;
+         }
     }
 
     if (isAPI) {
@@ -68,12 +80,6 @@ server.httpServer = http.createServer(async (req: IncomingMessage, res: ServerRe
      <link rel="stylesheet" href="/css/socials.css">
      <link rel="stylesheet" href="/css/main.css">
 
-     <link rel="stylesheet" href="/css/main.css">
-     <link rel="stylesheet" href="/css/main.min.css">
-     <link rel="stylesheet" href="/css/main.6e5wret51.css">
-     <link rel="stylesheet" href="/css/main.6e5wret51.6e5wret51.css">
-     <link rel="stylesheet" href="/css/main.css?v=2">
-     <link rel="stylesheet" href="/css/main.css?v=6e5wret51">
  </head>
 
             <body>
@@ -109,6 +115,8 @@ server.httpServer = http.createServer(async (req: IncomingMessage, res: ServerRe
          </div>
          <p class="copyright">&copy; 2023 - All rights reserved</p>
      </footer>
+
+     <script src="/js/main.js" type="module" defer></script>
  </body>
 
   </html>`;

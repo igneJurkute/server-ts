@@ -7,8 +7,8 @@ import fs from 'fs/promises';
      fullPublicPath: (trimmedFilePath: string) => string;
      create: (dir: string, fileName: string, content: any) => Promise<[boolean, string | Error]>;
      read: (dir: string, fileName: string) => Promise<[boolean, string | Error]>;
-     readPublic: (dir: string, fileName: string) => Promise<[boolean, string]>;
-     readPublicBinary: (dir: string, fileName: string) => Promise<[boolean, string | Buffer]>;
+     readPublic: (trimmedFilePath: string) => Promise<[boolean, string]>;
+     readPublicBinary: (trimmedFilePath: string) => Promise<[boolean, string | Buffer]>;
      update: (dir: string, fileName: string, content: any) => Promise<[boolean, string | Error]>;
      delete: (dir: string, fileName: string) => Promise<[boolean, string | Error]>;
  }
@@ -24,12 +24,12 @@ import fs from 'fs/promises';
  file.fullPath = (dir: string, fileName: string): string => {
      const __filename = fileURLToPath(import.meta.url);
      const __dirname = path.dirname(__filename);
-     return path.join(__dirname, '../.data', dir, fileName);
+     return path.join(__dirname, '../../.data', dir, fileName);
  }
  file.fullPublicPath = (trimmedFilePath: string) => {
      const __filename = fileURLToPath(import.meta.url);
      const __dirname = path.dirname(__filename);
-     return path.join(__dirname, '../public', trimmedFilePath);
+     return path.join(__dirname, '../../public', trimmedFilePath);
  }
  
  /**
