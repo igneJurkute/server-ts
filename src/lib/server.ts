@@ -1,4 +1,5 @@
 import http, { IncomingMessage, ServerResponse } from 'node:http';
+import { file } from './file.js';
 
 type Server = { 
     init: () => void;
@@ -8,7 +9,7 @@ type Server = {
 
 const server = {} as Server;
 
-server.httpServer = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+server.httpServer = http.createServer(async (req: IncomingMessage, res: ServerResponse) => {
     const socket = req.socket as any;
     const encryption = socket.encryption as any;
     const ssl = encryption !== undefined ? 's' : '';
@@ -19,16 +20,32 @@ server.httpServer = http.createServer((req: IncomingMessage, res: ServerResponse
     const trimmedPath = parsedURL.pathname
         .replace(/^\/+|\/+$/g, '')
         .replace(/\/\/+/g, '/');
-    const isTextFile = false;       // galune: .css, .js, .svg, ...
-    const isBinaryFile = false;     // galune: .png, .jpg, .webp, .eot, .ttf, ...
-    const isAPI = false;            // url prasideda: /api/.....
+    const textFileExtensions = ['css', 'js', 'svg', 'webmanifest'];
+    const binaryFileExtensions = ['png', 'jpg', 'jpeg', 'webp', 'ico', 'eot', 'ttf', 'woff', 'woff2', 'otf'];
+    const fileExtension = trimmedPath.slice(trimmedPath.lastIndexOf('.') + 1);
+    
+    const isTextFile = textFileExtensions.includes(fileExtension);
+    const isBinaryFile = binaryFileExtensions.includes(fileExtension);
+    const isAPI = trimmedPath.startsWith('api/');
     const isPage = !isTextFile && !isBinaryFile && !isAPI;
 
 
     let responseContent = 'ERROR: neturiu tai ko tu nori...';
 
 
-    if (trimmedPath === '') {
+    if (isTextFile) {
+        responseContent = 'TEKSTINIS FAILAS';
+    }
+
+    if (isBinaryFile) {
+        responseContent = 'BINARY FAILAS';
+    }
+
+    if (isAPI) {
+        responseContent = 'API DUOMENYS';
+    }
+
+    if (isPage) {
         responseContent = `<!DOCTYPE html>
             <html lang="en">
 
@@ -50,6 +67,13 @@ server.httpServer = http.createServer((req: IncomingMessage, res: ServerResponse
      <link rel="stylesheet" href="/css/header.css">
      <link rel="stylesheet" href="/css/socials.css">
      <link rel="stylesheet" href="/css/main.css">
+
+     <link rel="stylesheet" href="/css/main.css">
+     <link rel="stylesheet" href="/css/main.min.css">
+     <link rel="stylesheet" href="/css/main.6e5wret51.css">
+     <link rel="stylesheet" href="/css/main.6e5wret51.6e5wret51.css">
+     <link rel="stylesheet" href="/css/main.css?v=2">
+     <link rel="stylesheet" href="/css/main.css?v=6e5wret51">
  </head>
 
             <body>
@@ -91,7 +115,6 @@ server.httpServer = http.createServer((req: IncomingMessage, res: ServerResponse
 
     }
 
-    console.log(trimmedPath);
 
     return res.end(responseContent);
 });
