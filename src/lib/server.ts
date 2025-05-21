@@ -85,23 +85,20 @@ server.httpServer = http.createServer(async (req: IncomingMessage, res: ServerRe
     }
 
     if (isPage) {
-        console.log('>>>', trimmedPath);
+        let fileResponse = await file.read('../pages', trimmedPath + '.html');
+        let [err, msg] = fileResponse;
 
-        if (trimmedPath === '') {
-            const [err, msg] = await file.read('../pages', 'home.html');
-            res.writeHead(err ? 404 : 200, {
-                'Content-Type': MIMES.html,
-            });
-            if (err) {
-                responseContent = 'ERROR: HOME PAGE NOT FOUND...';
-            } else {
-                responseContent = msg;
-            }
-        } else if (trimmedPath === 'contact-us') {
-            responseContent = `CONTACT-US PAGE`;
-        } else {
-            responseContent = `404 PAGE`;
+        if (err) {
+            fileResponse = await file.read('../pages', '404.html');
+            err = fileResponse[0];
+            msg = fileResponse[1];
         }
+
+        res.writeHead(err ? 404 : 200, {
+            'Content-Type': MIMES.html,
+        });
+
+        responseContent = msg as string;
 
     }
 
